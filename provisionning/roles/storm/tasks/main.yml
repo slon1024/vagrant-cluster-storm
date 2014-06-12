@@ -1,0 +1,12 @@
+- name: Install dependencies
+  apt: name={{item}} state=latest force=yes install_recommends=yes
+  with_items:
+    - pkg-config
+    - python
+    - unzip
+
+- name: prepare group storm
+  group: name=storm state=present
+
+- name: prepare user storm
+  user: name=storm group=storm comment="storm user" state=present
