@@ -1,0 +1,4 @@
+- name: install java dependencies
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - java7-jdk
