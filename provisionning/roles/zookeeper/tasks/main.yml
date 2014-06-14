@@ -1,0 +1,31 @@
+- name: prepare group zookeeper
+  group: name=zookeeper state=present
+
+- name: prepare user zookeeper
+  user: name=zookeeper group=zookeeper comment="zookeeper" state=present
+
+- name: fetch zookeeper
+  get_url: url={{ zoo_url }} dest={{ zoo_archive }}
+
+- name: uncompress zookeeper
+  shell: chdir={{ install_dir }} tar xf {{ zoo_archive }} creates={{ install_dir }}/zookeeper-{{ zoo_version }}
+
+- name: change owner zookeeper dir
+  file: path={{ install_dir }}/zookeeper-{{ zoo_version }} owner=zookeeper group=zookeeper mode=0777 state=directory recurse=yes
+
+- name: symlink zookeeper
+  file: src={{ install_dir }}/zookeeper-{{ zoo_version }} dest={{ install_dir }}/zookeeper owner=zookeeper group=zookeeper state=link
+
+- name: create data dir
+  file: path={{ zookeeper['data_dir'] }} owner=zookeeper group=zookeeper state=directory mode=0777
+
+- name: myid for zookeeper
+  template: src=myid.j2 dest={{ zookeeper['data_dir'] }}/myid owner=zookeeper group=zookeeper mode=0777
+  notify: restart zookeeper
+
+- name: zoo.cfg for zookeeper
+  template: src=zoo.cfg.j2 dest=/opt/zookeeper-{{ zoo_version }}/conf/zoo.cfg owner=zookeeper group=zookeeper mode=0777
+  notify: restart zookeeper
+
+- name: add zookeeper to PATH
+  template: src=profile.d/zookeeper.sh.j2 dest=/etc/profile.d/zookeeper.sh mode=0644
