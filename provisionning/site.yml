@@ -6,3 +6,21 @@
     - vars.yml
   roles:
     - common
+
+- hosts: storm
+  remote_user: vagrant
+  user: root
+  sudo: true
+  var_files:
+    - vars.yml
+  roles:
+    - storm
+
+- hosts: storm_master
+  remote_user: vagrant
+  user: root
+  sudo: true
+  var_files:
+    - vars.yml
+  roles:
+    - storm_master
