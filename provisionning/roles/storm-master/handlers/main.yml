@@ -1,0 +1,9 @@
+---
+- name: reload supervisord
+  shell: supervisorctl reread && supervisorctl update
+
+- name: restart storm-nimbus
+  shell: supervisorctl restart storm-nimbus
+
+- name: restart storm-ui
+  shell: supervisorctl restart storm-ui
