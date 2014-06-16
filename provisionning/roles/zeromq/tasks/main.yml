@@ -1,0 +1,5 @@
+- name: fetch zeromq
+  get_url: url={{ zeromq['url'] }} dest={{ zeromq['archive'] }}
+
+- name: unpack zeromq
+  shell: chdir={{ install_dir }} tar xf {{ zeromq['archive'] }} creates={{ zeromq['home_dir'] }}
