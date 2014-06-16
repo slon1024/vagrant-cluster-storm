@@ -10,3 +10,24 @@
 
 - name: prepare user storm
   user: name=storm group=storm comment="storm user" state=present
+
+- name: fetch storm
+  get_url: url={{ storm['url'] }} dest={{ tmp_dir }}/storm-{{ storm_version }}.zip
+
+- name: unpack storm
+  shell: chdir={{ install_dir }} unzip {{ tmp_dir }}/storm-{{ storm_version }}.zip creates={{ install_dir }}/storm-{{ storm_version }}
+
+- name: symlink storm
+  file: src={{ install_dir }}/storm-{{ storm_version }} dest={{ storm['home_dir'] }} owner=storm group=storm recurse=yes state=link
+
+- name: create dir /logs
+  file: path={{ storm['home_dir'] }}/logs owner=storm group=storm recurse=yes state=directory
+
+- name: create dir /conf
+  file: path={{ storm['home_dir'] }}/conf owner=storm group=storm recurse=yes state=directory
+
+- name: link local log dir to /var/log/storm
+  file: src={{ storm['home_dir'] }}/logs dest={{ storm['log_dir'] }} owner=storm group=storm state=link
+
+- name: recurse change permissions
+  file: path={{ storm['home_dir'] }} owner=storm group=storm recurse=yes state=directory
