@@ -1,5 +1,15 @@
-- name: fetch zeromq
+- name: fetch
   get_url: url={{ zeromq['url'] }} dest={{ zeromq['archive'] }}
 
-- name: unpack zeromq
-  shell: chdir={{ install_dir }} tar xf {{ zeromq['archive'] }} creates={{ zeromq['home_dir'] }}
+- name: unpack
+  command: chdir={{ install_dir }} tar xf {{ zeromq['archive'] }} creates={{ zeromq['home_dir'] }}
+
+- name: compile
+  command: chdir={{ zeromq['home_dir'] }} ./configure creates=zeromq['home_dir']/Makefile
+
+- name: build
+  command: chdir={{ zeromq['home_dir'] }} make creates=zeromq['home_dir']/src/libzmq_la-clock.lo
+
+- name: install
+  command: chdir={{ zeromq['home_dir'] }} make install creates=/usr/local/include/zmq.h
+  sudo: true
