@@ -14,7 +14,7 @@
   command: chdir={{ jzmq['home_dir'] }} ./autogen.sh creates={{ jzmq['home_dir'] }}/configure
 
 - name: configure
-  command: chdir={{ jzmq['home_dir'] }}  JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64 ./configure creates={{ jzmq['home_dir'] }}/Makefile
+  command: chdir={{ jzmq['home_dir'] }} ./configure creates={{ jzmq['home_dir'] }}/Makefile
 
 - name: build
   command: chdir={{ jzmq['home_dir'] }} make creates={{ jzmq['home_dir'] }}/src/zmq.jar
