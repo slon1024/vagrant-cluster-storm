@@ -1,2 +1,2 @@
 java:
-  java_home: /usr/lib/jvm/java-7-oracle
+  home_dir: /usr/lib/jvm/java-7-openjdk-amd64
