@@ -1,0 +1,8 @@
+tmp_dir: /tmp
+zeromq_version: "4.0.3"
+install_dir: /opt
+
+zeromq:
+  url: "http://download.zeromq.org/zeromq-{{ zeromq_version }}.tar.gz"
+  archive: "{{ tmp_dir }}/zeromq-{{ zeromq_version }}.tar.gz"
+  home_dir: "{{ install_dir }}/zeromq-{{ zeromq_version }}"
