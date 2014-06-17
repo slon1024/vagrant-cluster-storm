@@ -20,5 +20,5 @@
   command: chdir={{ jzmq['home_dir'] }} make creates={{ jzmq['home_dir'] }}/src/zmq.jar
 
 - name: install
-  command: chdir={{ jzmq['home_dir'] }} make install creates=/usr/local/share/java/zmq.jar
+  command: chdir={{ jzmq['home_dir'] }} make install creates={{ jzmq['jar_dir'] }}/zmq.jar
   sudo: true

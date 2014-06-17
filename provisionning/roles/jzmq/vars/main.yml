@@ -3,3 +3,4 @@ install_dir: /opt
 jzmq:
   repo: "https://github.com/nathanmarz/jzmq.git"
   home_dir: "{{ install_dir }}/jzmq"
+  jar_dir: "/usr/local/share/java"
