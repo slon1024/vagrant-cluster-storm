@@ -1,0 +1,24 @@
+- name: install libtool, autoconf
+  apt: pkg={{item}} state=installed update_cache=yes
+  with_items:
+    - libtool
+    - autoconf
+
+- name: fetch
+  git: repo={{ jzmq['repo'] }} dest={{ jzmq['home_dir'] }}
+
+- name: magic bug
+  command: chdir={{ jzmq['home_dir'] }} sed -i 's/classdist_noinst.stamp/classnoinst.stamp/g' src/Makefile.am
+
+- name: autogen
+  command: chdir={{ jzmq['home_dir'] }} ./autogen.sh creates={{ jzmq['home_dir'] }}/configure
+
+- name: configure
+  command: chdir={{ jzmq['home_dir'] }} ./configure creates={{ jzmq['home_dir'] }}/Makefile
+
+- name: build
+  command: chdir={{ jzmq['home_dir'] }} make creates={{ jzmq['home_dir'] }}/src/zmq.jar
+
+- name: install
+  command: chdir={{ jzmq['home_dir'] }} make install creates={{ jzmq['jar_dir'] }}/zmq.jar
+  sudo: true
