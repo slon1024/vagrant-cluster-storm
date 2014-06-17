@@ -1,10 +1,10 @@
-- name: Clean apt cache
+- name: clean apt cache
   shell: apt-get clean && touch ~/.apt_cleaned creates=~/.apt_cleaned
 
-- name: Update apt cache
+- name: update apt cache
   apt: update_cache=yes cache_valid_time=3600
 
-- name: Create the hosts file for all machines
+- name: create the hosts file for all machines
   template: src=etc/hosts.j2 dest=/etc/hosts
 
-- hostname: name={{host}}
+- hostname: name={{ host }}
