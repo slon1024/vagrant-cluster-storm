@@ -1,0 +1,11 @@
+tmp_dir: /tmp
+install_dir: /opt
+log_dir: /var/log
+storm_version: 0.9.0.1
+
+storm:
+  url: "https://dl.dropboxusercontent.com/s/dj86w8ojecgsam7/storm-{{ storm_version }}.zip"
+  archive: "{{ tmp_dir }}/storm-{{ storm_version }}.zip"
+  home_dir: "{{ install_dir }}/storm-{{ storm_version }}"
+  link: "{{ install_dir }}/storm"
+  log_dir: "{{ log_dir }}/storm"
