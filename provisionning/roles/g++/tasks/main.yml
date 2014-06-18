@@ -1,2 +1,2 @@
 - name: install
-  apt: pkg=g++ state=installed
+  apt: pkg=g++ state=present
