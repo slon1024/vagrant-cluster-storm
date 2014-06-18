@@ -1,5 +1,5 @@
 - name: install
-  apt: pkg=java7-jdk state=installed update_cache=yes
+  apt: pkg=java7-jdk state=present
 
 - name: add JAVA_HOME to PATH
   template: src=profile.d/java.sh.j2 dest=/etc/profile.d/java.sh mode=0644
