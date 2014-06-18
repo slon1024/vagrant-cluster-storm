@@ -7,5 +7,6 @@ storm:
   url: "https://dl.dropboxusercontent.com/s/dj86w8ojecgsam7/storm-{{ storm_version }}.zip"
   archive: "{{ tmp_dir }}/storm-{{ storm_version }}.zip"
   home_dir: "{{ install_dir }}/storm-{{ storm_version }}"
+  bin_dir: "{{ install_dir }}/storm-{{ storm_version }}/bin"
   link: "{{ install_dir }}/storm"
   log_dir: "{{ log_dir }}/storm"
