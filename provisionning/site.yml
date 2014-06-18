@@ -2,8 +2,6 @@
   remote_user: vagrant
   user: root
   sudo: true
-  vars_files:
-    - vars.yml
   roles:
     - common
 
@@ -11,8 +9,6 @@
   remote_user: vagrant
   user: root
   sudo: true
-  var_files:
-    - vars.yml
   roles:
     - storm
 
@@ -20,7 +16,5 @@
   remote_user: vagrant
   user: root
   sudo: true
-  var_files:
-    - vars.yml
   roles:
     - storm_master
