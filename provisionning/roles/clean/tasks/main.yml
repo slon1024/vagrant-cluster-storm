@@ -1,0 +1,5 @@
+- name: Clean apt cache
+  shell: apt-get clean && touch ~/.apt_cleaned creates=~/.apt_cleaned
+
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
