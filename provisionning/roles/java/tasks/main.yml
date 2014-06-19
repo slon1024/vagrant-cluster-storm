@@ -3,3 +3,6 @@
 
 - name: add JAVA_HOME to PATH
   template: src=profile.d/java.sh.j2 dest=/etc/profile.d/java.sh mode=0644
+
+- name: read JAVA_HOME
+  command: bash /etc/profile.d/java.sh
