@@ -1,5 +1,5 @@
 - name: install libtool, autoconf
-  apt: pkg={{item}} state=installed update_cache=yes
+  apt: pkg={{ item }} state=present
   with_items:
     - libtool
     - autoconf
