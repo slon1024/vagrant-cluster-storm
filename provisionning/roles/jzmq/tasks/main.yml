@@ -1,8 +1,9 @@
-- name: install libtool, autoconf
+- name: install libtool, autoconf, pkg-config
   apt: pkg={{ item }} state=present
   with_items:
     - libtool
     - autoconf
+    - pkg-config
 
 - name: fetch
   git: repo={{ jzmq['repo'] }} dest={{ jzmq['home_dir'] }}
@@ -15,6 +16,8 @@
 
 - name: configure
   command: chdir={{ jzmq['home_dir'] }} ./configure creates={{ jzmq['home_dir'] }}/Makefile
+  environment:
+    JAVA_HOME: "{{ jzmq['java_dir'] }}"
 
 - name: build
   command: chdir={{ jzmq['home_dir'] }} make creates={{ jzmq['home_dir'] }}/src/zmq.jar
