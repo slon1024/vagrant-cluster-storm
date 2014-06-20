@@ -1,3 +1,4 @@
+---
 - name: copy the config for storm
   template: src=storm.yaml.j2 dest={{ storm['home_dir'] }}/conf/storm.yaml
   notify: 
