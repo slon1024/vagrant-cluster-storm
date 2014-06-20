@@ -1,0 +1,14 @@
+install_dir: /opt
+log_dir: /var/log
+storm_version: 0.9.0.1
+
+zookeeper:
+  clientport: 2181 
+
+storm:
+  home_dir: "{{ install_dir }}/storm-{{ storm_version }}"
+  bin_dir: "{{ install_dir }}/storm-{{ storm_version }}/bin"
+  data_dir: "{{ install_dir }}/storm-{{ storm_version }}/data"
+  log_dir: "{{ log_dir }}/storm"
+  zookeeper_root: /storm
+  ui_port: 8080
