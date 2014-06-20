@@ -6,7 +6,7 @@
     - pkg-config
 
 - name: fetch
-  git: repo={{ jzmq['repo'] }} dest={{ jzmq['home_dir'] }}
+  git: repo={{ jzmq['repo'] }} dest={{ jzmq['home_dir'] }} update=false
 
 - name: magic bug
   command: chdir={{ jzmq['home_dir'] }} sed -i 's/classdist_noinst.stamp/classnoinst.stamp/g' src/Makefile.am
