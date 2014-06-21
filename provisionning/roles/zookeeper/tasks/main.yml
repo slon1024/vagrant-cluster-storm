@@ -1,0 +1,32 @@
+- name: prepare group
+  group: name=zookeeper state=present
+
+- name: prepare user
+  user: name=zookeeper group=zookeeper comment="zookeeper" state=present
+
+- name: fetch
+  get_url: url={{ zookeeper['url'] }} dest={{ zookeeper['archive'] }}
+
+- name: uncompress
+  shell: chdir={{ install_dir }} tar xf {{ zookeeper['archive'] }} creates={{ zookeeper['home_dir'] }}
+
+
+- name: symlink
+  file: src={{ zookeeper['home_dir'] }} dest={{ zookeeper['link'] }} owner=zookeeper group=zookeeper state=link
+
+- name: create dir /data
+  file: path={{ zookeeper['data_dir'] }} owner=zookeeper group=zookeeper state=directory
+
+- name: generate myid
+  template: src=myid.j2 dest={{ zookeeper['data_dir'] }}/myid owner=zookeeper group=zookeeper
+  notify: restart zookeeper
+
+- name: zoo.cfg for zookeeper
+  template: src=zoo.cfg.j2 dest={{ zookeeper['home_dir'] }}/conf/zoo.cfg owner=zookeeper group=zookeeper
+  notify: restart zookeeper
+
+- name: add zookeeper to PATH
+  template: src=profile.d/zookeeper.sh.j2 dest=/etc/profile.d/zookeeper.sh mode=0644
+
+- name: recurse change permissions
+  file: path={{ zookeeper['home_dir'] }} owner=zookeeper group=zookeeper state=directory recurse=yes

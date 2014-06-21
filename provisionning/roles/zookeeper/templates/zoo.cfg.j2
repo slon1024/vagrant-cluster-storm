@@ -1,0 +1,11 @@
+tickTime=2000
+dataDir={{ zookeeper['data_dir'] }}
+clientPort={{ zookeeper['clientport'] }}
+initLimit=5
+syncLimit=2
+{% for host in groups['zookeeper'] %}
+server.{{ hostvars[host].local_ipv4 | myid }}={{ hostvars[host]['local_ipv4'] }}:{{ zookeeper['leader_port'] }}:{{ zookeeper['election_port'] }}
+{% endfor %}
+
+autopurge.snapRetainCount=3
+autopurge.purgeInterval=24
