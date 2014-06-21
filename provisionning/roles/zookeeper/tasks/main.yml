@@ -1,31 +1,32 @@
-- name: prepare group zookeeper
+- name: prepare group
   group: name=zookeeper state=present
 
-- name: prepare user zookeeper
+- name: prepare user
   user: name=zookeeper group=zookeeper comment="zookeeper" state=present
 
-- name: fetch zookeeper
-  get_url: url={{ zoo_url }} dest={{ zoo_archive }}
+- name: fetch
+  get_url: url={{ zookeeper['url'] }} dest={{ zookeeper['archive'] }}
 
-- name: uncompress zookeeper
-  shell: chdir={{ install_dir }} tar xf {{ zoo_archive }} creates={{ install_dir }}/zookeeper-{{ zoo_version }}
+- name: uncompress
+  shell: chdir={{ install_dir }} tar xf {{ zookeeper['archive'] }} creates={{ zookeeper['home_dir'] }}
 
-- name: change owner zookeeper dir
-  file: path={{ install_dir }}/zookeeper-{{ zoo_version }} owner=zookeeper group=zookeeper mode=0777 state=directory recurse=yes
 
-- name: symlink zookeeper
-  file: src={{ install_dir }}/zookeeper-{{ zoo_version }} dest={{ install_dir }}/zookeeper owner=zookeeper group=zookeeper state=link
+- name: symlink
+  file: src={{ zookeeper['home_dir'] }} dest={{ zookeeper['home_dir'] }} owner=zookeeper group=zookeeper state=link
 
-- name: create data dir
+- name: create dir /data
   file: path={{ zookeeper['data_dir'] }} owner=zookeeper group=zookeeper state=directory mode=0777
 
-- name: myid for zookeeper
+- name: generate myid
   template: src=myid.j2 dest={{ zookeeper['data_dir'] }}/myid owner=zookeeper group=zookeeper mode=0777
   notify: restart zookeeper
 
 - name: zoo.cfg for zookeeper
-  template: src=zoo.cfg.j2 dest=/opt/zookeeper-{{ zoo_version }}/conf/zoo.cfg owner=zookeeper group=zookeeper mode=0777
+  template: src=zoo.cfg.j2 dest={{ zookeeper['home_dir'] }}/conf/zoo.cfg owner=zookeeper group=zookeeper mode=0777
   notify: restart zookeeper
 
 - name: add zookeeper to PATH
   template: src=profile.d/zookeeper.sh.j2 dest=/etc/profile.d/zookeeper.sh mode=0644
+
+- name: recurse change permissions
+  file: path={{ zookeeper['home_dir'] }} owner=zookeeper group=zookeeper mode=0777 state=directory recurse=yes
