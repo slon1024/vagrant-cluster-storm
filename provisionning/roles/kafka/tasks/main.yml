@@ -1,0 +1,11 @@
+- name: prepare group
+  group: name=kafka state=present
+
+- name: prepare user
+  user: name=kafka group=kafka comment="kafka" state=present
+
+- name: fetch
+  get_url: url={{ kafka['url'] }} dest={{ kafka['archive'] }}
+
+- name: unpack
+  command: chdir={{ install_dir }} tar xf {{ kafka['archive'] }} creates={{ kafka['home_dir'] }}
