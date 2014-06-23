@@ -9,3 +9,12 @@
 
 - name: unpack
   command: chdir={{ install_dir }} tar xf {{ kafka['archive'] }} creates={{ kafka['home_dir'] }}
+
+- name: sbt update
+  command: chdir={{ kafka['home_dir'] }} ./sbt update creates=~/.assembly-package-dependency
+
+- name: sbt package
+  command: chdir={{ kafka['home_dir'] }} ./sbt package creates=~/.assembly-package-dependency
+
+- name: sbt assembly-package-dependency
+  command: chdir={{ kafka['home_dir'] }} ./sbt assembly-package-dependency && touch ~/.assembly-package-dependency creates=~/.assembly-package-dependency
