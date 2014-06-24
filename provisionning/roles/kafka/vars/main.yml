@@ -2,6 +2,9 @@ log_dir: /var/log
 install_dir: /opt
 kafka_version: "0.8.1"
 
+zookeeper:
+  clientport: 2181
+
 kafka:
   url: "https://archive.apache.org/dist/kafka/{{ kafka_version }}/kafka-{{ kafka_version }}-src.tgz"
   archive: "{{ install_dir }}/kafka-{{ kafka_version }}-src.tgz"
@@ -10,3 +13,4 @@ kafka:
   port: 7200
   log_dir: "{{ log_dir }}/kafka"
   log_file: "{{ log_dir }}/kafka/kafka.log"
+  jmx_port: 9999

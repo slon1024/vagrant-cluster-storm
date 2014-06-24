@@ -5,7 +5,7 @@
   user: name=kafka group=kafka comment="kafka" state=present
 
 - name: fetch
-  get_url: url={{ kafka['url'] }} dest={{ kafka['archive'] }} creates={{ kafka['archive'] }}
+  get_url: url={{ kafka['url'] }} dest={{ kafka['archive'] }}
 
 - name: unpack
   command: chdir={{ install_dir }} tar xf {{ kafka['archive'] }} creates={{ kafka['home_dir'] }}
@@ -23,10 +23,17 @@
   file: path={{ kafka['log_dir'] }} owner=kafka group=kafka state=directory
 
 - name: server config
-  template: src=server.properties.j2 dest={{ kafka['log_dir'] }}/config/server.properties owner=kafka group=kafka mode=755
+  template: src=server.properties.j2 dest={{ kafka['home_dir'] }}/config/server.properties owner=kafka group=kafka mode=755
   notify: restart kafka
 
-- name: copy log config
-  template: src=log4j.properties.j2 dest={{ kafka['log_dir'] }}/config/log4j.properties owner=kafka group=kafka mode=755
+- name: log config
+  template: src=log4j.properties.j2 dest={{ kafka['home_dir'] }}/config/log4j.properties owner=kafka group=kafka mode=755
+  notify: restart kafka
+
+- name: run-class script with MX4j enabled
+  copy: src=kafka-run-class.sh dest={{ kafka['home_dir'] }}/bin/kafka-run-class.sh owner=kafka group=kafka mode=765
+
+- name: init script
+  template: src=etc/init/kafka.conf.j2 dest=/etc/init/kafka.conf
   notify: restart kafka
 
