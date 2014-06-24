@@ -5,16 +5,28 @@
   user: name=kafka group=kafka comment="kafka" state=present
 
 - name: fetch
-  get_url: url={{ kafka['url'] }} dest={{ kafka['archive'] }}
+  get_url: url={{ kafka['url'] }} dest={{ kafka['archive'] }} creates={{ kafka['archive'] }}
 
 - name: unpack
   command: chdir={{ install_dir }} tar xf {{ kafka['archive'] }} creates={{ kafka['home_dir'] }}
 
-- name: sbt update
-  command: chdir={{ kafka['home_dir'] }} ./sbt update creates=~/.assembly-package-dependency
+- name: fetch
+  get_url: url={{ kafka['url'] }} dest={{ kafka['archive'] }}
 
-- name: sbt package
-  command: chdir={{ kafka['home_dir'] }} ./sbt package creates=~/.assembly-package-dependency
+- name: symlink
+  file: src={{ kafka['home_dir'] }} dest={{ kafka['link'] }} owner=kafka group=kafka state=link
 
-- name: sbt assembly-package-dependency
-  command: chdir={{ kafka['home_dir'] }} ./sbt assembly-package-dependency && touch ~/.assembly-package-dependency creates=~/.assembly-package-dependency
+- name: gradle jar
+  command: chdir={{ kafka['home_dir'] }} ./gradlew jar creates=core/build
+
+- name: create log dir
+  file: path={{ kafka['log_dir'] }} owner=kafka group=kafka state=directory
+
+- name: server config
+  template: src=server.properties.j2 dest={{ kafka['log_dir'] }}/config/server.properties owner=kafka group=kafka mode=755
+  notify: restart kafka
+
+- name: copy log config
+  template: src=log4j.properties.j2 dest={{ kafka['log_dir'] }}/config/log4j.properties owner=kafka group=kafka mode=755
+  notify: restart kafka
+

@@ -1,3 +1,4 @@
+log_dir: /var/log
 install_dir: /opt
 kafka_version: "0.8.1"
 
@@ -6,3 +7,6 @@ kafka:
   archive: "{{ install_dir }}/kafka-{{ kafka_version }}-src.tgz"
   home_dir: "{{ install_dir }}/kafka-{{ kafka_version }}-src"
   link: "{{ install_dir }}/kafka"
+  port: 7200
+  log_dir: "{{ log_dir }}/kafka"
+  log_file: "{{ log_dir }}/kafka/kafka.log"
