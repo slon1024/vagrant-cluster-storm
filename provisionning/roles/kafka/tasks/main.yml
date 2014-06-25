@@ -37,3 +37,21 @@
   template: src=etc/init/kafka.conf.j2 dest=/etc/init/kafka.conf
   notify: restart kafka
 
+- name: supervisord configuration
+  template: >
+    src=etc/init/supervisor.conf.j2
+    dest=/etc/supervisor/conf.d/kafka.conf
+    owner=root
+    group=root
+    mode=0644
+  register: supervisord
+  notify:
+    - reload supervisord
+    - restart kafka
+
+- name: reload supervisord
+  shell: supervisorctl reread && supervisorctl update
+  when: supervisord.changed
+
+- name: ensure supervisor running
+  service: name=supervisor enabled=yes state=started
