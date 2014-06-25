@@ -1,0 +1,12 @@
+[program:kafka]
+command={{ kafka['home_dir'] }}/bin/kafka-server-start.sh {{ kafka['home_dir'] }}/config/server.properties
+user=kafka
+autostart=true
+autorestart=true
+startsecs=10
+startretries=999
+log_stdout=true
+log_stderr=true
+logfile={{ kafka['log_file'] }}
+logfile_maxbytes=20MB
+logfile_backups=50
