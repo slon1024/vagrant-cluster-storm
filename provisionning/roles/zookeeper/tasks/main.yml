@@ -10,7 +10,6 @@
 - name: uncompress
   shell: chdir={{ install_dir }} tar xf {{ zookeeper['archive'] }} creates={{ zookeeper['home_dir'] }}
 
-
 - name: symlink
   file: src={{ zookeeper['home_dir'] }} dest={{ zookeeper['link'] }} owner=zookeeper group=zookeeper state=link
 

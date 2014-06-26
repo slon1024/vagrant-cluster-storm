@@ -55,3 +55,6 @@
 
 - name: ensure supervisor running
   service: name=supervisor enabled=yes state=started
+
+- name: add kafka to PATH
+  template: src=etc/profile.d/kafka.sh.j2 dest=/etc/profile.d/kafka.sh mode=0644
