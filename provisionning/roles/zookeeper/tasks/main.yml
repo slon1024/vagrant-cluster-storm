@@ -17,7 +17,7 @@
   file: path={{ zookeeper['data_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory
 
 - name: create dir /log
-  file: path={{ zookeeper['log'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory
+  file: path={{ zookeeper['log_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory
 
 - name: generate myid
   template: src=myid.j2 dest={{ zookeeper['data_dir'] }}/myid owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }}
@@ -26,6 +26,9 @@
 - name: zoo.cfg for zookeeper
   template: src=zoo.cfg.j2 dest={{ zookeeper['home_dir'] }}/conf/zoo.cfg owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }}
   notify: restart zookeeper
+
+- name: recurse change permissions
+  file: path={{ zookeeper['home_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory recurse=yes
 
 - name: add zookeeper to PATH
   template: src=etc/profile.d/zookeeper.sh.j2 dest=/etc/profile.d/zookeeper.sh mode=0644
@@ -38,5 +41,21 @@
     group=root
     mode=0755
 
-- name: recurse change permissions
-  file: path={{ zookeeper['home_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory recurse=yes
+- name: supervisord configuration
+  template: >
+    src=etc/supervisor/conf.d/zookeeper.conf.j2
+    dest=/etc/supervisor/conf.d/zookeeper.conf
+    owner=root
+    group=root
+    mode=0644
+  register: supervisord
+  notify: 
+    - reload supervisord
+    - restart zookeeper
+
+- name: manual reload supervisord when configuration changed
+  shell: supervisorctl reread && supervisorctl update
+  when: supervisord.changed
+
+- name: ensure supervisord running
+  service: name=supervisor enabled=yes state=started
