@@ -1,8 +1,8 @@
 - name: prepare group
-  group: name=zookeeper state=present
+  group: name={{ zookeeper['group'] }} state=present
 
 - name: prepare user
-  user: name=zookeeper group=zookeeper comment="zookeeper" state=present
+  user: name={{ zookeeper['user'] }} group={{ zookeeper['group'] }} comment="{{ zookeeper['group'] }}" state=present
 
 - name: fetch
   get_url: url={{ zookeeper['url'] }} dest={{ zookeeper['archive'] }}
@@ -11,21 +11,29 @@
   shell: chdir={{ install_dir }} tar xf {{ zookeeper['archive'] }} creates={{ zookeeper['home_dir'] }}
 
 - name: symlink
-  file: src={{ zookeeper['home_dir'] }} dest={{ zookeeper['link'] }} owner=zookeeper group=zookeeper state=link
+  file: src={{ zookeeper['home_dir'] }} dest={{ zookeeper['link'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=link
 
 - name: create dir /data
-  file: path={{ zookeeper['data_dir'] }} owner=zookeeper group=zookeeper state=directory
+  file: path={{ zookeeper['data_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory
 
 - name: generate myid
-  template: src=myid.j2 dest={{ zookeeper['data_dir'] }}/myid owner=zookeeper group=zookeeper
+  template: src=myid.j2 dest={{ zookeeper['data_dir'] }}/myid owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }}
   notify: restart zookeeper
 
 - name: zoo.cfg for zookeeper
-  template: src=zoo.cfg.j2 dest={{ zookeeper['home_dir'] }}/conf/zoo.cfg owner=zookeeper group=zookeeper
+  template: src=zoo.cfg.j2 dest={{ zookeeper['home_dir'] }}/conf/zoo.cfg owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }}
   notify: restart zookeeper
 
 - name: add zookeeper to PATH
-  template: src=profile.d/zookeeper.sh.j2 dest=/etc/profile.d/zookeeper.sh mode=0644
+  template: src=etc/profile.d/zookeeper.sh.j2 dest=/etc/profile.d/zookeeper.sh mode=0644
+
+- name: zookeeper start script
+  template: >
+    src=etc/init.d/zookeeper.sh.j2
+    dest=/etc/init.d/zookeeper.sh
+    owner=root
+    group=root
+    mode=0755
 
 - name: recurse change permissions
-  file: path={{ zookeeper['home_dir'] }} owner=zookeeper group=zookeeper state=directory recurse=yes
+  file: path={{ zookeeper['home_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory recurse=yes
