@@ -16,6 +16,9 @@
 - name: create dir /data
   file: path={{ zookeeper['data_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory
 
+- name: create dir /log
+  file: path={{ zookeeper['log'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory
+
 - name: generate myid
   template: src=myid.j2 dest={{ zookeeper['data_dir'] }}/myid owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }}
   notify: restart zookeeper
