@@ -1,60 +1,109 @@
 - name: prepare group
-  group: name={{ zookeeper['group'] }} state=present
+  group: >
+    name={{ zookeeper['group'] }} 
+    state=present
 
 - name: prepare user
-  user: name={{ zookeeper['user'] }} group={{ zookeeper['group'] }} comment="{{ zookeeper['group'] }}" state=present
+  user: >
+    name={{ zookeeper['user'] }} 
+    group={{ zookeeper['group'] }} 
+    comment="{{ zookeeper['group'] }}" 
+    state=present
 
 - name: fetch
-  get_url: url={{ zookeeper['url'] }} dest={{ zookeeper['archive'] }}
+  get_url: >
+    url={{ zookeeper['url'] }} 
+    dest={{ zookeeper['archive'] }}
 
 - name: uncompress
-  shell: chdir={{ install_dir }} tar xf {{ zookeeper['archive'] }} creates={{ zookeeper['home_dir'] }}
+  command: > 
+    chdir={{ install_dir }} 
+    tar xf {{ zookeeper['archive'] }} 
+    creates={{ zookeeper['home_dir'] }}
 
 - name: symlink
-  file: src={{ zookeeper['home_dir'] }} dest={{ zookeeper['link'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=link
+  file: > 
+    src={{ zookeeper['home_dir'] }} 
+    dest={{ zookeeper['link'] }} 
+    owner={{ zookeeper['user'] }} 
+    group={{ zookeeper['group'] }} 
+    state=link
 
 - name: create dir /data
-  file: path={{ zookeeper['data_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory
+  file: > 
+    path={{ zookeeper['data_dir'] }} 
+    owner={{ zookeeper['user'] }} 
+    group={{ zookeeper['group'] }} 
+    state=directory
 
 - name: create dir /log
-  file: path={{ zookeeper['log_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory
+  file: >
+    path={{ zookeeper['log_dir'] }} 
+    owner={{ zookeeper['user'] }} 
+    group={{ zookeeper['group'] }} 
+    state=directory
 
 - name: generate myid
-  template: src=myid.j2 dest={{ zookeeper['data_dir'] }}/myid owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }}
+  template: >
+    src=myid.j2 
+    dest={{ zookeeper['data_dir'] }}/myid 
+    owner={{ zookeeper['user'] }} 
+    group={{ zookeeper['group'] }}
   notify: restart zookeeper
 
 - name: zoo.cfg for zookeeper
-  template: src=zoo.cfg.j2 dest={{ zookeeper['home_dir'] }}/conf/zoo.cfg owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }}
+  template: >
+    src=zoo.cfg.j2 
+    dest={{ zookeeper['home_dir'] }}/conf/zoo.cfg 
+    owner={{ zookeeper['user'] }}
+    group={{ zookeeper['group'] }}
+  notify: restart zookeeper
+
+- name: log config
+  template: >
+    src=log4j.properties.j2 
+    dest={{ zookeeper['home_dir'] }}/conf/log4j.properties 
+    owner={{ zookeeper['user'] }} 
+    group={{ zookeeper['group'] }} 
+    mode=755
   notify: restart zookeeper
 
 - name: recurse change permissions
-  file: path={{ zookeeper['home_dir'] }} owner={{ zookeeper['user'] }} group={{ zookeeper['group'] }} state=directory recurse=yes
+  file: >
+    path={{ zookeeper['home_dir'] }} 
+    owner={{ zookeeper['user'] }} 
+    group={{ zookeeper['group'] }} 
+    state=directory 
+    recurse=yes
 
 - name: add zookeeper to PATH
-  template: src=etc/profile.d/zookeeper.sh.j2 dest=/etc/profile.d/zookeeper.sh mode=0644
+  template: >
+    src=etc/profile.d/zookeeper.sh.j2 
+    dest=/etc/profile.d/zookeeper.sh 
+    mode=0644
 
 - name: zookeeper start script
   template: >
     src=etc/init.d/zookeeper.sh.j2
     dest=/etc/init.d/zookeeper.sh
-    owner=root
-    group=root
+    owner={{ zookeeper['user'] }}
+    group={{ zookeeper['group'] }}
     mode=0755
 
 - name: supervisord configuration
   template: >
     src=etc/supervisor/conf.d/zookeeper.conf.j2
     dest=/etc/supervisor/conf.d/zookeeper.conf
-    owner=root
-    group=root
+    owner={{ zookeeper['user'] }}
+    group={{ zookeeper['group'] }}
     mode=0644
   register: supervisord
   notify: 
     - reload supervisord
     - restart zookeeper
 
-- name: manual reload supervisord when configuration changed
-  shell: supervisorctl reread && supervisorctl update
+- name: manual reload supervisord
+  command: supervisorctl reread && supervisorctl update
   when: supervisord.changed
 
 - name: ensure supervisord running
