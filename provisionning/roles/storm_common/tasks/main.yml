@@ -67,3 +67,9 @@
     group={{ storm['group'] }} 
     recurse=yes 
     state=directory
+
+- name: add storm to PATH
+  template: >
+    src=etc/profile.d/storm.sh.j2 
+    dest=/etc/profile.d/storm.sh 
+    mode=0644
