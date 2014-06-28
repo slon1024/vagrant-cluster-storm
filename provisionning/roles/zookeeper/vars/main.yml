@@ -9,7 +9,7 @@ zookeeper:
   home_dir: "{{ install_dir }}/zookeeper-{{ zookeeper_version }}"
   bin_dir: "{{ install_dir }}/zookeeper-{{ zookeeper_version }}/bin"
   data_dir: "{{ install_dir }}/zookeeper-{{ zookeeper_version }}/data"
-  log_dir: "{{ install_dir }}/zookeeper-{{ zookeeper_version }}/log"
+  log_dir: "{{ install_dir }}/zookeeper/log"
   link: "{{ install_dir }}/zookeeper"
 
   clientport: 2181
@@ -17,5 +17,5 @@ zookeeper:
   election_port: 3888
   jmx_port: 9999
 
-  user: vagrant
-  group: vagrant
+  user: zookeeper
+  group: zookeeper
