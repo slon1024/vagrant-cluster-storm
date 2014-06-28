@@ -25,3 +25,5 @@ storm:
 
   user: storm
   group: storm
+
+  supervisor_worker_timeout_secs: 60

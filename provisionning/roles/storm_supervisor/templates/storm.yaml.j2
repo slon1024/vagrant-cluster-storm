@@ -16,11 +16,9 @@ supervisor.slots.ports:
   - {{ port }}
 {% endfor %}
 
-supervisor.childopts: "-verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port={{ storm.jmx_port }}"
+supervisor.childopts: "-verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port={{ storm['jmx_port'] }}"
 worker.childopts: "-verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=1%ID%"
 
-supervisor.worker.timeout.secs: 60
-
+supervisor.worker.timeout.secs: {{ storm['supervisor_worker_timeout_secs'] }}
 ui.port: {{ storm['ui_port'] }}
-
-logviewer.port: 8000
+logviewer.port: {{ storm['logviewer_port'] }}

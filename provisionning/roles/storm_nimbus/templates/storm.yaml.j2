@@ -11,10 +11,8 @@ storm.zookeeper.root: "{{ storm['zookeeper_root'] }}"
 nimbus.host: "{{ hostvars[host].local_ipv4 }}"
 {% endfor %}
 
-nimbus.childopts: "-verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=9998"
+nimbus.childopts: "-verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port={{ storm['jmx_port'] }}"
 
-supervisor.worker.timeout.secs: 60
-
+supervisor.worker.timeout.secs: {{ storm['supervisor_worker_timeout_secs'] }}
 ui.port: {{ storm['ui_port'] }}
-
 logviewer.port: {{ storm['logviewer_port'] }}
