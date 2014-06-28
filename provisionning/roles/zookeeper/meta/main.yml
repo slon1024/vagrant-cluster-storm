@@ -1,4 +1,3 @@
 dependencies:
-  - role: clean
   - role: java
   - role: supervisord
