@@ -1,0 +1,35 @@
+---
+- name: copy the config for storm
+  template: >
+    src=storm.yaml.j2 
+    dest={{ storm['home_dir'] }}/conf/storm.yaml
+  notify: 
+    - reload supervisord
+    - restart storm-supervisor
+
+- name: supervisord start script
+  template: >
+    src=etc/init.d/storm-supervisor.sh.j2
+    dest=/etc/init.d/storm-supervisor.sh
+    owner=root
+    group=root
+    mode=0755
+
+- name: supervisord configuration
+  template: >
+    src=etc/supervisor/conf.d/storm-supervisor.conf.j2
+    dest=/etc/supervisor/conf.d/storm-supervisor.conf
+    owner=root
+    group=root
+    mode=0644
+  register: supervisord
+  notify: 
+    - reload supervisord
+    - restart storm-supervisor
+
+- name: manual reload supervisord when configuration changed
+  shell: supervisorctl reread && supervisorctl update
+  when: supervisord.changed
+
+- name: Ensure supervisord running
+  service: name=supervisor enabled=yes state=started

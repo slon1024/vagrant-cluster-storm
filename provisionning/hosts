@@ -1,22 +1,23 @@
 [all:children]
-storm_master
-storm_slave
+storm_common
 zookeeper
 kafka
 
-[storm:children]
-storm_master
-storm_slave
+[storm_common:children]
+storm_nimbus
+storm_supervisor
 
-[storm_master]
+[storm_nimbus]
 10.77.1.2
 
-[storm_slave]
+[storm_supervisor]
 10.77.1.3
 10.77.1.4
 
 [zookeeper]
 10.77.1.2
+10.77.1.3
+10.77.1.4
 
 [kafka]
 10.77.1.3

@@ -1,0 +1,47 @@
+---
+- name: copy config storm.yaml
+  template: >
+    src=storm.yaml.j2 
+    dest={{ storm['home_dir'] }}/conf/storm.yaml
+    owner={{ storm['user'] }} 
+    group={{ storm['group'] }}
+  notify: 
+    - reload supervisord
+    - restart storm-nimbus
+    - restart storm-ui
+
+- name: nimbus start script
+  template: >
+    src=etc/init.d/storm-nimbus.sh.j2
+    dest=/etc/init.d/storm-nimbus.sh
+    owner=root
+    group=root
+    mode=0755
+
+- name: ui start script
+  template: >
+    src=etc/init.d/storm-ui.sh.j2
+    dest=/etc/init.d/storm-ui.sh
+    owner=root
+    group=root
+    mode=0755
+
+- name: supervisord configuration
+  template: >
+    src=etc/supervisor/conf.d/storm-nimbus.conf.j2 
+    dest=/etc/supervisor/conf.d/storm-nimbus.conf 
+    owner=root 
+    group=root 
+    mode=0644
+  register: supervisord
+  notify: 
+    - reload supervisord
+    - restart storm-nimbus
+    - restart storm-ui
+
+- name: manual reload supervisord
+  command: supervisorctl reread && supervisorctl update
+  when: supervisord.changed
+
+- name: ensure supervisord running
+  service: name=supervisor enabled=yes state=started

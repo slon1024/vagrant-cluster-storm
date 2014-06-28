@@ -1,6 +1,0 @@
----
-- name: reload supervisord
-  shell: supervisorctl reread && supervisorctl update
-
-- name: restart storm-supervisor
-  shell: supervisorctl restart storm_supervisor

@@ -1,6 +1,0 @@
----
-dependencies:
-  - role: zeromq 
-  - role: jzmq
-  - role: supervisord
-  - role: storm
