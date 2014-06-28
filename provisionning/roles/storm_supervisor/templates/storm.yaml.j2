@@ -12,7 +12,7 @@ nimbus.host: "{{ hostvars[host].local_ipv4 }}"
 {% endfor %}
 
 supervisor.slots.ports:
-{% for port in storm_slots_ports %}
+{% for port in storm['slots_ports'] %}
   - {{ port }}
 {% endfor %}
 

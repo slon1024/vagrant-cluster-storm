@@ -17,6 +17,11 @@ storm:
   jmx_port: 9999
   ui_port: 8080
   logviewer_port: 8000
+  slots_ports:
+    - 6700
+    - 6701
+    - 6702
+    - 6703
 
   user: storm
   group: storm
