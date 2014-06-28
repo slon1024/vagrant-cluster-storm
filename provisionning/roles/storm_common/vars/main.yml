@@ -13,6 +13,9 @@ storm:
   log_dir: "{{ log_dir }}/storm"
 
   zookeeper_root: /storm
+  supervisor_worker_timeout_secs: 60
+  env: vagrant
+
 
   jmx_port: 9999
   ui_port: 8080
@@ -25,5 +28,3 @@ storm:
 
   user: storm
   group: storm
-
-  supervisor_worker_timeout_secs: 60
