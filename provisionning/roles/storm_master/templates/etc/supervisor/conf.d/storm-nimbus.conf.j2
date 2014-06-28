@@ -1,6 +1,6 @@
 [program:storm-nimbus]
 command={{ storm['bin_dir'] }}/storm nimbus
-user=storm
+user=root
 autostart=true
 autorestart=true
 startsecs=10
@@ -13,7 +13,7 @@ logfile_backups=50
 
 [program:storm-ui]
 command={{ storm['bin_dir'] }}/storm ui
-user=storm
+user=root
 autostart=true
 autorestart=true
 startsecs=10
