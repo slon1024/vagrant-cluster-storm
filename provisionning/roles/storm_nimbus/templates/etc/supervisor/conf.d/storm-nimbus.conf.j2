@@ -1,5 +1,5 @@
 [program:storm-nimbus]
-command={{ storm['bin_dir'] }}/storm nimbus
+command=/etc/init.d/storm-nimbus.sh
 user={{ storm['user'] }}
 autostart=true
 autorestart=true
@@ -12,7 +12,7 @@ logfile_maxbytes=20MB
 logfile_backups=50
 
 [program:storm-ui]
-command={{ storm['bin_dir'] }}/storm ui
+command=/etc/init.d/storm-ui.sh
 user={{ storm['user'] }}
 autostart=true
 autorestart=true
