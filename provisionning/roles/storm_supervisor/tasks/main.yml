@@ -1,12 +1,11 @@
 ---
 - name: copy the config for storm
-  template: src=storm.yaml.j2 dest={{ storm['home_dir'] }}/conf/storm.yaml
+  template: >
+    src=storm.yaml.j2 
+    dest={{ storm['home_dir'] }}/conf/storm.yaml
   notify: 
     - reload supervisord
     - restart storm-supervisor
-
-- name: add STORM_HOME to PATH 
-  template: src=etc/profile.d/storm.sh.j2 dest=/etc/profile.d/storm.sh mode=755
 
 - name: supervisord start script
   template: >
