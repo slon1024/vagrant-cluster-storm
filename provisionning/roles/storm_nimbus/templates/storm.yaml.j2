@@ -7,7 +7,7 @@ storm.zookeeper.servers:
 storm.zookeeper.port: {{ zookeeper['clientport'] }}
 storm.zookeeper.root: "{{ storm['zookeeper_root'] }}"
 
-{% for host in groups.storm_master %}
+{% for host in groups.storm_nimbus %}
 nimbus.host: "{{ hostvars[host].local_ipv4 }}"
 {% endfor %}
 
