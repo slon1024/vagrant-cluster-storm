@@ -1,2 +1,5 @@
 export KAFKA_HOME={{ kafka['link'] }}
 export PATH=$PATH:$KAFKA_HOME/bin
+export JMX_PORT=${JMX_PORT:-{{ kafka['jmx_port'] }}}
+export KAFKA_HEAP_OPTS="{{ kafka['kafka_heap_opts'] }}"
+export SCALA_VERSION={{ kafka['scala_version'] }}

@@ -1,45 +1,81 @@
 - name: prepare group
-  group: name=kafka state=present
+  group: >
+    name={{ kafka['group'] }} 
+    state=present
 
 - name: prepare user
-  user: name=kafka group=kafka comment="kafka" state=present
+  user: >
+    name={{ kafka['user'] }} 
+    group={{ kafka['group'] }} 
+    comment="{{ kafka['user'] }} user" 
+    state=present
 
 - name: fetch
-  get_url: url={{ kafka['url'] }} dest={{ kafka['archive'] }}
+  get_url: >
+    url={{ kafka['url'] }} 
+    dest={{ kafka['archive'] }}
 
 - name: unpack
-  command: chdir={{ install_dir }} tar xf {{ kafka['archive'] }} creates={{ kafka['home_dir'] }}
-
-- name: fetch
-  get_url: url={{ kafka['url'] }} dest={{ kafka['archive'] }}
+  command: >
+    chdir={{ install_dir }} 
+    tar xf {{ kafka['archive'] }} 
+    creates={{ kafka['home_dir'] }}
 
 - name: symlink
-  file: src={{ kafka['home_dir'] }} dest={{ kafka['link'] }} owner=kafka group=kafka state=link
+  file: >
+    src={{ kafka['home_dir'] }} 
+    dest={{ kafka['link'] }} 
+    owner={{ kafka['user'] }} 
+    group={{ kafka['group'] }} 
+    state=link
 
 - name: gradle jar
-  command: chdir={{ kafka['home_dir'] }} ./gradlew jar creates=core/build
+  command: >
+    chdir={{ kafka['home_dir'] }} 
+    ./gradlew jar 
+    creates=core/build
 
 - name: create log dir
-  file: path={{ kafka['log_dir'] }} owner=kafka group=kafka state=directory
+  file: >
+    path={{ kafka['log_dir'] }} 
+    owner={{ kafka['user'] }} 
+    group={{ kafka['group'] }} 
+    state=directory
 
 - name: server config
-  template: src=server.properties.j2 dest={{ kafka['home_dir'] }}/config/server.properties owner=kafka group=kafka mode=755
+  template: >
+    src=server.properties.j2 
+    dest={{ kafka['home_dir'] }}/config/server.properties 
+    owner={{ kafka['user'] }} 
+    group={{ kafka['group'] }} 
+    mode=755
   notify: restart kafka
 
 - name: log config
-  template: src=log4j.properties.j2 dest={{ kafka['home_dir'] }}/config/log4j.properties owner=kafka group=kafka mode=755
+  template: >
+    src=log4j.properties.j2 
+    dest={{ kafka['home_dir'] }}/config/log4j.properties 
+    owner={{ kafka['user'] }} 
+    group={{ kafka['group'] }} 
+    mode=755
   notify: restart kafka
 
-- name: run-class script with MX4j enabled
-  copy: src=kafka-run-class.sh dest={{ kafka['home_dir'] }}/bin/kafka-run-class.sh owner=kafka group=kafka mode=765
+- name: add variable to ENV
+  template: >
+    src=etc/profile.d/kafka.sh.j2 
+    dest=/etc/profile.d/kafka.sh 
+    mode=0644
+  notify:
+    - restart kafka
 
 - name: init script
-  template: src=etc/init/kafka.conf.j2 dest=/etc/init/kafka.conf
-  notify: restart kafka
+  template: >
+    src=etc/init.d/kafka.sh.j2 
+    dest=/etc/init.d/kafka.sh
 
 - name: supervisord configuration
   template: >
-    src=etc/init/supervisor.conf.j2
+    src=etc/supervisor/conf.d/kafka.conf.j2
     dest=/etc/supervisor/conf.d/kafka.conf
     owner=root
     group=root
@@ -55,6 +91,3 @@
 
 - name: ensure supervisor running
   service: name=supervisor enabled=yes state=started
-
-- name: add kafka to PATH
-  template: src=etc/profile.d/kafka.sh.j2 dest=/etc/profile.d/kafka.sh mode=0644
