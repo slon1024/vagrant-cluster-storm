@@ -1,0 +1,3 @@
+#!/bin/bash -l
+
+HOME=/home/{{ kafka['user'] }} {{ kafka['home_dir'] }}/bin/kafka-server-start.sh {{ kafka['home_dir'] }}/config/server.properties
