@@ -5,6 +5,13 @@
   roles:
     - common
 
+- hosts: zookeeper
+  remote_user: vagrant
+  user: root
+  sudo: true
+  roles:
+    - zookeeper
+
 - hosts: storm
   remote_user: vagrant
   user: root
@@ -19,9 +26,9 @@
   roles:
     - storm_master
 
-- hosts: zookeeper
+- hosts: kafka
   remote_user: vagrant
   user: root
   sudo: true
   roles:
-    - zookeeper
+    - kafka
