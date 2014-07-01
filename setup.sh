@@ -27,6 +27,9 @@ PIP_VERSION=$(pip --version | awk '{ print $2 }')
 REQUIRED_PIP_VERSION="1.5.2"
 check_version "pip" $PIP_VERSION $REQUIRED_PIP_VERSION
 
+ANSIBLE_VERSION=$(ansible --version | awk '{ print $2 }')
+REQUIRED_ANSIBLE_VERSION="1.5"
+check_version "ansible" $ANSIBLE_VERSION $REQUIRED_ANSIBLE_VERSION
 
 vagrant destroy -f
 vagrant up --no-provision
