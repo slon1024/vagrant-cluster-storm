@@ -2,12 +2,14 @@
 
 
 check_version () {
+  type $1 >/dev/null 2>&1 || { echo >&2 "\"${1}\" is required but it's not installed. You need to install \"${1} ${3}+\". Aborting."; exit 1; }
+
   first=$(echo $2 | tr -d '.')
   second=$(echo $3 | tr -d '.')
   if [ $(echo "$first < $second" | bc) -eq 1 ]
   then
-    echo "required $1: ${3}+, actual is: $2"
-    exit
+    echo >&2 "required $1: ${3}+, actual is: ${2}. Aborting."
+    exit 1
   fi
 }
 
