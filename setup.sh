@@ -13,11 +13,15 @@ check_version () {
 
 VIRTUALBOX_VERSION=$(virtualbox --help | head -n 1 | awk '{print $NF}')
 REQUIRED_VIRTUALBOX_VERSION="4.3.8"
-check_version "VirtualBox" $VIRTUALBOX_VERSION $REQUIRED_VIRTUALBOX_VERSION
+check_version "virtualbox" $VIRTUALBOX_VERSION $REQUIRED_VIRTUALBOX_VERSION
 
 VAGRANT_VERSION=$(vagrant --version | awk '{ print $2 }')
 REQUIRED_VAGRANT_VERSION="1.5.1"
 check_version "vagrant" $VAGRANT_VERSION $REQUIRED_VAGRANT_VERSION
+
+PYTHON_VERSION=$(python -c 'import sys; print(".".join(map(str, sys.version_info[:3])))')
+REQUIRED_PYTHON_VERSION="2.7.5"
+check_version "python" $PYTHON_VERSION $REQUIRED_PYTHON_VERSION
 
 
 vagrant destroy -f
