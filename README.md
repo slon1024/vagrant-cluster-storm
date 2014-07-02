@@ -1,8 +1,15 @@
-Cluster storm
+The storm cluster
 =====================
 
-Setup cluster storm (also [kafka], [zookeeper]) using [Vagrant] with [ansible].
+Setup the  [storm] cluster (also [kafka], [zookeeper]) using [Vagrant] with [ansible].
 
+## Run the first time
+Run script `setup.sh` and follow according to tips.
+
+## Run general
+* start: `vagrant up`
+* finish: `vagrant halt`
+* other commands: `vagrant list-commands`
 
 ## Contributing
 * Fork it
@@ -11,6 +18,7 @@ Setup cluster storm (also [kafka], [zookeeper]) using [Vagrant] with [ansible].
 * Push to the branch (`git push origin my-new-feature`)
 * Create new *Pull Request*
 
+[storm]:https://storm.incubator.apache.org/
 [kafka]:http://kafka.apache.org/
 [zookeeper]:http://zookeeper.apache.org/
 [Vagrant]:http://www.vagrantup.com/
