@@ -1,7 +1,7 @@
 Cluster storm
 =====================
 
-Setup cluster storm (also kafka, zookeeper) using Vagrant.
+Setup cluster storm (also kafka, zookeeper) using [Vagrant] with [ansible].
 
 
 ## Contributing
@@ -10,3 +10,7 @@ Setup cluster storm (also kafka, zookeeper) using Vagrant.
 * Commit your changes (`git commit -am 'Added some feature'`)
 * Push to the branch (`git push origin my-new-feature`)
 * Create new *Pull Request*
+
+[Vagrant]:http://www.vagrantup.com/
+[ansible]:http://www.ansible.com/
+
