@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 check_version () {
   type $1 >/dev/null 2>&1 || { echo >&2 "\"${1}\" is required but it's not installed. You need to install \"${1} ${3}+\". Aborting."; exit 1; }
 
