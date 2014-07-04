@@ -1,0 +1,22 @@
+- name: prepare group
+  group: >
+    name={{ redis['group'] }}
+    state=present
+
+- name: prepare user
+  user: >
+    name={{ redis['user'] }}
+    group={{ redis['group'] }}
+    comment="{{ redis['user'] }} user"
+    state=present
+
+- name: fetch
+  get_url: >
+    url={{ redis['url'] }} 
+    dest={{ redis['archive'] }}
+
+- name: uncompress
+  command: > 
+    chdir={{ install_dir }} 
+    tar xf {{ redis['archive'] }} 
+    creates={{ redis['home_dir'] }}
