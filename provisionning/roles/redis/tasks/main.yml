@@ -1,3 +1,11 @@
+---
+- name: install dependencies
+  apt: pkg={{ item }} state=present
+  with_items:
+    - gcc
+    - make
+    - tcl
+
 - name: prepare group
   group: >
     name={{ redis['group'] }}
@@ -20,3 +28,52 @@
     chdir={{ install_dir }} 
     tar xf {{ redis['archive'] }} 
     creates={{ redis['home_dir'] }}
+
+- name: create bin
+  file: >
+    path={{ redis['bin_dir'] }} 
+    owner={{ redis['user'] }} 
+    group={{ redis['group'] }} 
+    recurse=yes
+    state=directory
+
+- name: install redis
+  command: >
+    chdir={{ redis['home_dir'] }}
+    make PREFIX={{ redis['home_dir'] }} install
+    creates={{ redis['bin_dir'] }}/redis-server
+
+- name: check tests_passed exists
+  stat: path={{ redis['path_test_passed'] }}
+  register: tests_passed
+
+- name: make test
+  command: >
+    chdir={{ redis['home_dir'] }}
+    make test 
+  register: make_test
+  when: not tests_passed.stat.exists
+
+- name: check result test
+  file: >
+    path={{ redis['path_test_passed'] }}
+    owner={{ redis['user'] }} 
+    group={{ redis['group'] }}
+    state=touch
+  when: make_test|changed and make_test.stdout.find('{{ redis['message_test_passed'] }}') != -1
+
+- name: check tests_passed exists
+  stat: path={{ redis['path_test_passed'] }}
+  register: tests_passed
+
+- fail: msg='Fails "make test" with errors'
+  when: not tests_passed.stat.exists 
+
+- name: add redis to PATH
+  template: >
+    src=etc/profile.d/redis.sh.j2 
+    dest=/etc/profile.d/redis.sh 
+    mode=0644
+
+
+
