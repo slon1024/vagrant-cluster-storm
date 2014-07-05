@@ -6,7 +6,11 @@ redis:
   url: http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz
   archive: "{{ tmp_dir }}/redis-{{ redis_version }}.tar.gz"
   home_dir: "{{ install_dir }}/redis-{{ redis_version }}"
+  src_dir: "{{ install_dir }}/redis-{{ redis_version }}/src"
   bin_dir: "{{ install_dir }}/redis-{{ redis_version }}/bin"
+
+  message_test_passed: 'All tests passed without errors!'
+  path_test_passed: "{{ install_dir }}/redis-{{ redis_version }}/.tests_passed"
 
   group: redis
   user: redis
