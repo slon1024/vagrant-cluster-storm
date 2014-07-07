@@ -75,5 +75,10 @@
     dest=/etc/profile.d/redis.sh 
     mode=0644
 
+- name: init script
+  template: >
+    src=etc/init.d/redis.sh.j2 
+    dest=/etc/init.d/redis.sh
+
 
 
