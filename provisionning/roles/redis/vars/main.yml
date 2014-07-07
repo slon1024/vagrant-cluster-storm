@@ -8,6 +8,7 @@ redis:
   home_dir: "{{ install_dir }}/redis-{{ redis_version }}"
   src_dir: "{{ install_dir }}/redis-{{ redis_version }}/src"
   bin_dir: "{{ install_dir }}/redis-{{ redis_version }}/bin"
+  log_dir: "{{ install_dir }}/redis-{{ redis_version }}/log"
 
   message_test_passed: 'All tests passed without errors!'
   path_test_passed: "{{ install_dir }}/redis-{{ redis_version }}/.tests_passed"

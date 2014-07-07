@@ -69,6 +69,13 @@
 - fail: msg='Fails "make test" with errors'
   when: not tests_passed.stat.exists 
 
+- name: create log dir
+  file: >
+    path={{ redis['log_dir'] }} 
+    owner={{ redis['user'] }} 
+    group={{ redis['group'] }} 
+    state=directory
+
 - name: add redis to PATH
   template: >
     src=etc/profile.d/redis.sh.j2 
@@ -76,14 +83,6 @@
     owner={{ redis['user'] }} 
     group={{ redis['group'] }}
     mode=0644
-
-- name: init script
-  template: >
-    src=etc/init.d/redis.sh.j2 
-    dest=/etc/init.d/redis.sh
-    owner={{ redis['user'] }} 
-    group={{ redis['group'] }}
-    mode=0655
 
 - name: supervisord configuration
   template: >
