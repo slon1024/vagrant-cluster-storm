@@ -1,0 +1,12 @@
+[program:redis]
+command={{ redis['home_dir'] }}/bin/redis-server
+user=redis
+autostart=true
+autorestart=true
+startsecs=10
+startretries=999
+log_stdout=true
+log_stderr=true
+logfile={{ redis['home_dir'] }}/log/redis.log
+logfile_maxbytes=20MB
+logfile_backups=50

@@ -73,12 +73,36 @@
   template: >
     src=etc/profile.d/redis.sh.j2 
     dest=/etc/profile.d/redis.sh 
+    owner={{ redis['user'] }} 
+    group={{ redis['group'] }}
     mode=0644
 
 - name: init script
   template: >
     src=etc/init.d/redis.sh.j2 
     dest=/etc/init.d/redis.sh
+    owner={{ redis['user'] }} 
+    group={{ redis['group'] }}
+    mode=0655
+
+- name: supervisord configuration
+  template: >
+    src=etc/supervisor/conf.d/redis.conf.j2
+    dest=/etc/supervisor/conf.d/redis.conf
+    owner=root
+    group=root
+    mode=0644
+  register: supervisord
+  notify:
+    - reload supervisord
+    - restart redis
+
+- name: reload supervisord
+  shell: supervisorctl reread && supervisorctl update
+  when: supervisord.changed
+
+- name: ensure supervisor running
+  service: name=supervisor enabled=yes state=started
 
 
 
