@@ -12,19 +12,19 @@
   roles:
     - zookeeper
 
-- hosts: storm
+- hosts: storm_nimbus
   remote_user: vagrant
   user: root
   sudo: true
   roles:
-    - storm
+    - storm_nimbus
 
-- hosts: storm_master
+- hosts: storm_supervisor
   remote_user: vagrant
   user: root
   sudo: true
   roles:
-    - storm_master
+    - storm_supervisor
 
 - hosts: kafka
   remote_user: vagrant
