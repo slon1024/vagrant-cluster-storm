@@ -4,4 +4,7 @@ nodejs_version: "0.10.29"
 nodejs:
   url: "http://nodejs.org/dist/v{{ nodejs_version }}/node-v{{ nodejs_version }}-linux-x64.tar.gz"
   archive: "{{ install_dir }}/nodejs-{{ nodejs_version }}.tar.gz"
-  home_dir: "{{ install_dir }}/nodejs-{{ nodejs_version }}"
+  home_dir: "{{ install_dir }}/node-v{{ nodejs_version }}-linux-x64"
+
+  group: nodejs
+  user: nodejs
