@@ -9,6 +9,10 @@ redis:
   src_dir: "{{ install_dir }}/redis-{{ redis_version }}/src"
   bin_dir: "{{ install_dir }}/redis-{{ redis_version }}/bin"
   log_dir: "{{ install_dir }}/redis-{{ redis_version }}/log"
+  data_dir: "{{ install_dir }}/redis-{{ redis_version }}/data"
+
+  port: 6379
+  maxmemory: "{{ (ansible_memtotal_mb * 1024 * 1024 * 0.8)|int }}"
 
   message_test_passed: 'All tests passed without errors!'
   path_test_passed: "{{ install_dir }}/redis-{{ redis_version }}/.tests_passed"
