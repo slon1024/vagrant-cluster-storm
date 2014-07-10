@@ -69,11 +69,39 @@
 - fail: msg='Fails "make test" with errors'
   when: not tests_passed.stat.exists 
 
+- name: copy config redis-server
+  template: >
+    src=redis.conf.j2
+    dest={{ redis['home_dir'] }}/redis.config
+    mode=0644
+    owner={{ redis['user'] }} 
+    group={{ redis['group'] }}
+  register: supervisord
+  notify: 
+    - reload supervisord
+    - restart redis
+
 - name: create log dir
   file: >
     path={{ redis['log_dir'] }} 
     owner={{ redis['user'] }} 
     group={{ redis['group'] }} 
+    state=directory
+
+- name: create data dir
+  file: >
+    path={{ redis['data_dir'] }} 
+    owner={{ redis['user'] }} 
+    group={{ redis['group'] }} 
+    recurse=yes
+    state=directory
+
+- name: recurse change permissions
+  file: >
+    path={{ redis['home_dir'] }} 
+    owner={{ redis['user'] }} 
+    group={{ redis['group'] }} 
+    recurse=yes 
     state=directory
 
 - name: add redis to PATH
