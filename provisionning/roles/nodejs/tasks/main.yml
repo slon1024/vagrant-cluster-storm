@@ -1,0 +1,29 @@
+- name: prepare group
+  group: >
+    name={{ nodejs['group'] }} 
+    state=present
+
+- name: prepare user
+  user: >
+    name={{ nodejs['user'] }} 
+    group={{ nodejs['group'] }} 
+    comment="{{ nodejs['user'] }} user" 
+    state=present
+
+- name: fetch
+  get_url: >
+    url={{ nodejs['url'] }} 
+    dest={{ nodejs['archive'] }}
+
+- name: unpack
+  command: >
+    chdir={{ install_dir }} 
+    tar xf {{ nodejs['archive'] }} 
+    creates={{ nodejs['home_dir'] }}
+
+- name: definied NODEJS_HOME and added it to PATH
+  template: >
+    src=etc/profile.d/nodejs.sh.j2
+    dest=/etc/profile.d/nodejs.sh
+    mode=0644
+
