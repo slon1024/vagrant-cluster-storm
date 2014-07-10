@@ -1,21 +1,7 @@
 ---
-# - name: install npm
-#   apt: pkg=npm state=present
+- name: install redis_commander
+  command: "{{ nodejs['home_dir'] }}/bin/npm install -g redis-commander"
+  register: install_npm
 
-# - name: install node
-#   apt: pkg=node state=present
-
-# - name: set registry
-#   command: npm config set registry http://registry.npmjs.org/
-
-# - name: install redis_commander
-#   command: npm install -g redis-commander
-#   register: install_npm
-
-# - fail: failure install npm
-#   when: install_npm|changed and install_npm.stdout.find('npm not ok') != -1
-
-
-#  install node
-#  npm install -g http-browserify
-
+- fail: failure install npm
+  when: install_npm|changed and install_npm.stdout.find('npm not ok') != -1
