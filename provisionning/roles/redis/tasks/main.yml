@@ -104,6 +104,14 @@
     recurse=yes 
     state=directory
 
+- name: init redis_commander
+  template: >
+    src=etc/init.d/redis_commander.sh.j2 
+    dest=/etc/init.d/redis_commander.sh 
+    owner={{ redis['user'] }} 
+    group={{ redis['group'] }}
+    mode=0655
+
 - name: add redis to PATH
   template: >
     src=etc/profile.d/redis.sh.j2 
@@ -123,6 +131,18 @@
   notify:
     - reload supervisord
     - restart redis
+
+# - name: supervisord configuration
+#   template: >
+#     src=etc/supervisor/conf.d/redis_commander.conf.j2
+#     dest=/etc/supervisor/conf.d/redis_commander.conf
+#     owner=root
+#     group=root
+#     mode=0644
+#   register: supervisord
+#   notify:
+#     - reload supervisord
+#     - restart redis_commander
 
 - name: reload supervisord
   shell: supervisorctl reread && supervisorctl update

@@ -1,0 +1,2 @@
+redis_commander:
+  port: 8085

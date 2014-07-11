@@ -1,5 +1,5 @@
 [program:redis]
-command={{ redis['home_dir'] }}/bin/redis-server
+command=/etc/init.d/redis_commander.sh
 user=root
 autostart=true
 autorestart=true
@@ -7,6 +7,6 @@ startsecs=10
 startretries=999
 log_stdout=true
 log_stderr=true
-logfile={{ redis['log_dir'] }}/redis.log
+logfile={{ redis['log_dir'] }}/redis_commander.log
 logfile_maxbytes=20MB
 logfile_backups=50

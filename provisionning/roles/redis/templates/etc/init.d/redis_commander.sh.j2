@@ -1,0 +1,3 @@
+#!/bin/bash -l
+
+HOME=/home/{{ redis['user'] }} redis-commander --redis-port {{ redis['port'] }} --redis-host {% for host in groups['redis'] %}{{ hostvars[host].local_ipv4 }}{% endfor %} --port {{ redis_commander['port'] }}

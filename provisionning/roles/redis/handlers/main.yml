@@ -1,3 +1,6 @@
 ---
 - name: restart redis
   command: supervisorctl restart redis
+
+- name: restart redis_commander
+  command: supervisorctl restart redis_commander
