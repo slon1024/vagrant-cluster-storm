@@ -33,5 +33,9 @@ REQUIRED_ANSIBLE_VERSION="1.5"
 check_version "ansible" $ANSIBLE_VERSION $REQUIRED_ANSIBLE_VERSION
 
 vagrant destroy -f
+
 vagrant up --no-provision
-vagrant provision
+
+vagrant provision alpha
+vagrant provision beta
+vagrant provision gamma
