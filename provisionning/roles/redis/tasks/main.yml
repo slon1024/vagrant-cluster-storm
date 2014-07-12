@@ -132,17 +132,17 @@
     - reload supervisord
     - restart redis
 
-# - name: supervisord configuration
-#   template: >
-#     src=etc/supervisor/conf.d/redis_commander.conf.j2
-#     dest=/etc/supervisor/conf.d/redis_commander.conf
-#     owner=root
-#     group=root
-#     mode=0644
-#   register: supervisord
-#   notify:
-#     - reload supervisord
-#     - restart redis_commander
+- name: supervisord configuration
+  template: >
+    src=etc/supervisor/conf.d/redis_commander.conf.j2
+    dest=/etc/supervisor/conf.d/redis_commander.conf
+    owner=root
+    group=root
+    mode=0644
+  register: supervisord
+  notify:
+    - reload supervisord
+    - restart redis_commander
 
 - name: reload supervisord
   shell: supervisorctl reread && supervisorctl update
