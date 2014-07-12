@@ -5,3 +5,11 @@
 
 - fail: failure install npm
   when: install_npm|changed and install_npm.stdout.find('npm not ok') != -1
+
+- name: recurse change permissions
+  file: >
+    path=/opt/node-v0.10.29-linux-x64/lib/node_modules/redis-commander
+    owner={{ redis['user'] }}
+    group={{ redis['group'] }}
+    recurse=yes 
+    state=directory
