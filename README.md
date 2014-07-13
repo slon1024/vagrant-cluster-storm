@@ -1,6 +1,6 @@
 The storm cluster
 =====================
-Setup the  [storm] cluster (also [kafka], [zookeeper], [redis]) using [Vagrant] with [ansible].
+Setup the  [storm] cluster (also [kafka], [zookeeper], [redis], [redis-commander]) using [Vagrant] with [ansible].
 
 ## Run the first time
 Run script `setup.sh` (which check *pre requirements**) and if you have some gaps, then you should follow according to tips.
@@ -23,4 +23,5 @@ Run script `setup.sh` (which check *pre requirements**) and if you have some gap
 [Vagrant]:http://www.vagrantup.com/
 [ansible]:http://www.ansible.com/
 [redis]:http://redis.io/
+[redis-commander]:https://github.com/joeferner/redis-commander
 
