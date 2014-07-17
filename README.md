@@ -1,6 +1,6 @@
 The storm cluster
 =====================
-Setup the  [storm] cluster (also [kafka], [zookeeper], [redis], [redis-commander]) using [Vagrant] with [ansible].
+Setup the [storm] cluster (also [kafka], [zookeeper], [redis], [redis-commander]) using [Vagrant] with [ansible].
 
 ## Run the first time
 * `git clone https://github.com/slon1024/vagrant-cluster-storm.git`
@@ -11,6 +11,9 @@ Setup the  [storm] cluster (also [kafka], [zookeeper], [redis], [redis-commander
 * start: `vagrant up`
 * finish: `vagrant halt`
 * other commands: `vagrant list-commands`
+
+## Web UI
+* storm: `10.77.1.3:8080`
 
 ## Contributing
 * Fork it
