@@ -14,6 +14,7 @@ Setup the [storm] cluster (also [kafka], [zookeeper], [redis], [redis-commander]
 
 ## Web UI
 * storm: `10.77.1.3:8080`
+* redis-comander: `10.77.1.3:8085`
 
 ## Contributing
 * Fork it
