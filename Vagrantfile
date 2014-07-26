@@ -1,9 +1,9 @@
 VAGRANTFILE_API_VERSION = "2"
 
 hosts = {
-  "alpha" => {ip: "10.77.1.2", ram: "512", cpus: "2", ports: {}},
-  "beta"  => {ip: "10.77.1.3", ram: "512", cpus: "2", ports: {}},
-  "gamma" => {ip: "10.77.1.4", ram: "512", cpus: "2", ports: {}},
+  "alpha" => {ip: "10.77.1.2", ram: "1024", cpus: "2", ports: {}},
+  "beta"  => {ip: "10.77.1.3", ram: "1024", cpus: "2", ports: {}},
+  "gamma" => {ip: "10.77.1.4", ram: "1024", cpus: "2", ports: {}},
 }
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |vagrant_config|
