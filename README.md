@@ -13,7 +13,7 @@ Setup the [storm] cluster (also [kafka], [zookeeper], [redis], [redis-commander]
 * other commands: `vagrant list-commands`
 
 ## Web UI
-* storm: `10.77.1.3:8080`
+* storm: `10.77.1.2:8080`
 * redis-comander: `10.77.1.3:8085`
 
 ## Contributing
