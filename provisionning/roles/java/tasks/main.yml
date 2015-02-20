@@ -1,8 +1,14 @@
-- name: install
-  apt: pkg=java7-jdk state=present
+---
+- include: oracle.yml
+  when: java is defined and java['version']|search("oracle")
+
+- include: openjdk.yml
+  when: java is defined and java['version']|search("openjdk")
 
 - name: add JAVA_HOME to PATH
   template: src=profile.d/java.sh.j2 dest=/etc/profile.d/java.sh mode=0644
+  when: java['version'] is defined
 
 - name: read JAVA_HOME
   command: bash /etc/profile.d/java.sh
+  when: java['version'] is defined
