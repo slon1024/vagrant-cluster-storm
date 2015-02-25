@@ -9,8 +9,7 @@ hosts = {
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |vagrant_config|
   hosts.each do |name, params|
     vagrant_config.vm.define name do |config|
-      config.vm.box = "14.04_amd64"
-      config.vm.box_url = "https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box"
+      config.vm.box = "ubuntu/trusty64"
 
       config.vm.network :private_network, ip: params[:ip]
 
@@ -26,7 +25,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |vagrant_config|
 
       vagrant_config.vm.provision "ansible" do |ansible|
         #ansible.verbose = "vvvv"
-        ansible.limit = "all"
+        ansible.limit = params[:ip]
         ansible.inventory_path = "provisionning/hosts"
         ansible.playbook = "provisionning/site.yml"
       end
