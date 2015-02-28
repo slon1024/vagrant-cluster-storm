@@ -12,4 +12,3 @@
 
 - name: install
   command: chdir={{ zeromq['home_dir'] }} make install creates=/usr/local/include/zmq.h
-  sudo: true
