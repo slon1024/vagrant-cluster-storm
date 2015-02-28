@@ -1,85 +1,85 @@
 - name: prepare group
   group: >
-    name={{ zookeeper['group'] }} 
+    name={{ zookeeper['group'] }}
     state=present
 
 - name: prepare user
   user: >
-    name={{ zookeeper['user'] }} 
-    group={{ zookeeper['group'] }} 
-    comment="{{ zookeeper['group'] }}" 
+    name={{ zookeeper['user'] }}
+    group={{ zookeeper['group'] }}
+    comment="{{ zookeeper['group'] }}"
     state=present
 
 - name: fetch
   get_url: >
-    url={{ zookeeper['url'] }} 
+    url={{ zookeeper['url'] }}
     dest={{ zookeeper['archive'] }}
 
 - name: uncompress
-  command: > 
-    chdir={{ install_dir }} 
-    tar xf {{ zookeeper['archive'] }} 
+  command: >
+    chdir={{ install_dir }}
+    tar xf {{ zookeeper['archive'] }}
     creates={{ zookeeper['home_dir'] }}
 
 - name: symlink
-  file: > 
-    src={{ zookeeper['home_dir'] }} 
-    dest={{ zookeeper['link'] }} 
-    owner={{ zookeeper['user'] }} 
-    group={{ zookeeper['group'] }} 
+  file: >
+    src={{ zookeeper['home_dir'] }}
+    dest={{ zookeeper['link'] }}
+    owner={{ zookeeper['user'] }}
+    group={{ zookeeper['group'] }}
     state=link
 
 - name: create dir /data
-  file: > 
-    path={{ zookeeper['data_dir'] }} 
-    owner={{ zookeeper['user'] }} 
-    group={{ zookeeper['group'] }} 
+  file: >
+    path={{ zookeeper['data_dir'] }}
+    owner={{ zookeeper['user'] }}
+    group={{ zookeeper['group'] }}
     state=directory
 
 - name: create dir /log
   file: >
-    path={{ zookeeper['log_dir'] }} 
-    owner={{ zookeeper['user'] }} 
-    group={{ zookeeper['group'] }} 
+    path={{ zookeeper['log_dir'] }}
+    owner={{ zookeeper['user'] }}
+    group={{ zookeeper['group'] }}
     state=directory
 
 - name: generate myid
   template: >
-    src=myid.j2 
-    dest={{ zookeeper['data_dir'] }}/myid 
-    owner={{ zookeeper['user'] }} 
+    src=myid.j2
+    dest={{ zookeeper['data_dir'] }}/myid
+    owner={{ zookeeper['user'] }}
     group={{ zookeeper['group'] }}
   notify: restart zookeeper
 
 - name: zoo.cfg for zookeeper
   template: >
-    src=zoo.cfg.j2 
-    dest={{ zookeeper['home_dir'] }}/conf/zoo.cfg 
+    src=zoo.cfg.j2
+    dest={{ zookeeper['home_dir'] }}/conf/zoo.cfg
     owner={{ zookeeper['user'] }}
     group={{ zookeeper['group'] }}
   notify: restart zookeeper
 
 - name: log config
   template: >
-    src=log4j.properties.j2 
-    dest={{ zookeeper['home_dir'] }}/conf/log4j.properties 
-    owner={{ zookeeper['user'] }} 
-    group={{ zookeeper['group'] }} 
+    src=log4j.properties.j2
+    dest={{ zookeeper['home_dir'] }}/conf/log4j.properties
+    owner={{ zookeeper['user'] }}
+    group={{ zookeeper['group'] }}
     mode=755
   notify: restart zookeeper
 
 - name: recurse change permissions
   file: >
-    path={{ zookeeper['home_dir'] }} 
-    owner={{ zookeeper['user'] }} 
-    group={{ zookeeper['group'] }} 
-    state=directory 
+    path={{ zookeeper['home_dir'] }}
+    owner={{ zookeeper['user'] }}
+    group={{ zookeeper['group'] }}
+    state=directory
     recurse=yes
 
 - name: add zookeeper to PATH
   template: >
-    src=etc/profile.d/zookeeper.sh.j2 
-    dest=/etc/profile.d/zookeeper.sh 
+    src=etc/profile.d/zookeeper.sh.j2
+    dest=/etc/profile.d/zookeeper.sh
     mode=0644
 
 - name: zookeeper start script
@@ -98,7 +98,7 @@
     group={{ zookeeper['group'] }}
     mode=0644
   register: supervisord
-  notify: 
+  notify:
     - reload supervisord
     - restart zookeeper
 

@@ -1,7 +1,6 @@
-
 tmp_dir: /tmp
 install_dir: /opt
-zookeeper_version: 3.4.5
+zookeeper_version: 3.4.6
 
 zookeeper:
   url: "http://ftp.task.gda.pl/pub/www/apache/dist/zookeeper/zookeeper-{{ zookeeper_version }}/zookeeper-{{ zookeeper_version }}.tar.gz"
@@ -15,7 +14,7 @@ zookeeper:
   clientport: 2181
   leader_port: 2888
   election_port: 3888
-  jmx_port: 9999
+  jmx_port: 9992
 
   user: zookeeper
   group: zookeeper
