@@ -1,77 +1,80 @@
 - name: prepare group
   group: >
-    name={{ kafka['group'] }} 
+    name={{ kafka['group'] }}
     state=present
 
 - name: prepare user
   user: >
-    name={{ kafka['user'] }} 
-    group={{ kafka['group'] }} 
-    comment="{{ kafka['user'] }} user" 
+    name={{ kafka['user'] }}
+    group={{ kafka['group'] }}
+    comment="{{ kafka['user'] }} user"
     state=present
 
 - name: fetch
   get_url: >
-    url={{ kafka['url'] }} 
+    url={{ kafka['url'] }}
     dest={{ kafka['archive'] }}
 
 - name: unpack
   command: >
-    chdir={{ install_dir }} 
-    tar xf {{ kafka['archive'] }} 
+    chdir={{ install_dir }}
+    tar xf {{ kafka['archive'] }}
     creates={{ kafka['home_dir'] }}
 
 - name: symlink
   file: >
-    src={{ kafka['home_dir'] }} 
-    dest={{ kafka['link'] }} 
-    owner={{ kafka['user'] }} 
-    group={{ kafka['group'] }} 
+    src={{ kafka['home_dir'] }}
+    dest={{ kafka['link'] }}
+    owner={{ kafka['user'] }}
+    group={{ kafka['group'] }}
     state=link
-
-- name: gradle jar
-  command: >
-    chdir={{ kafka['home_dir'] }} 
-    ./gradlew jar 
-    creates=core/build
 
 - name: create log dir
   file: >
-    path={{ kafka['log_dir'] }} 
-    owner={{ kafka['user'] }} 
-    group={{ kafka['group'] }} 
+    path={{ kafka['log_dir'] }}
+    owner={{ kafka['user'] }}
+    group={{ kafka['group'] }}
     state=directory
 
 - name: server config
   template: >
-    src=server.properties.j2 
-    dest={{ kafka['home_dir'] }}/config/server.properties 
-    owner={{ kafka['user'] }} 
-    group={{ kafka['group'] }} 
+    src=server.properties.j2
+    dest={{ kafka['home_dir'] }}/config/server.properties
+    owner={{ kafka['user'] }}
+    group={{ kafka['group'] }}
     mode=755
   notify: restart kafka
 
 - name: log config
   template: >
-    src=log4j.properties.j2 
-    dest={{ kafka['home_dir'] }}/config/log4j.properties 
-    owner={{ kafka['user'] }} 
-    group={{ kafka['group'] }} 
+    src=log4j.properties.j2
+    dest={{ kafka['home_dir'] }}/config/log4j.properties
+    owner={{ kafka['user'] }}
+    group={{ kafka['group'] }}
     mode=755
   notify: restart kafka
 
+- name: recurse change permissions
+  file: >
+    path={{ kafka['home_dir'] }}
+    owner={{ kafka['user'] }}
+    group={{ kafka['group'] }}
+    recurse=yes
+    state=directory
+
 - name: add variable to ENV
   template: >
-    src=etc/profile.d/kafka.sh.j2 
-    dest=/etc/profile.d/kafka.sh 
+    src=etc/profile.d/kafka.sh.j2
+    dest=/etc/profile.d/kafka.sh
     mode=0644
   notify:
     - restart kafka
 
 - name: init script
   template: >
-    src=etc/init.d/kafka.sh.j2 
+    src=etc/init.d/kafka.sh.j2
     dest=/etc/init.d/kafka.sh
+    mode=0755
 
 - name: supervisord configuration
   template: >
