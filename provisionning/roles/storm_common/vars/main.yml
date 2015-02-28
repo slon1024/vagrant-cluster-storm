@@ -17,7 +17,7 @@ storm:
   env: vagrant
 
 
-  jmx_port: 9999
+  jmx_port: 9993
   ui_port: 8080
   logviewer_port: 8000
   slots_ports:

@@ -1,11 +1,11 @@
 ---
 - name: copy config storm.yaml
   template: >
-    src=storm.yaml.j2 
+    src=storm.yaml.j2
     dest={{ storm['home_dir'] }}/conf/storm.yaml
-    owner={{ storm['user'] }} 
+    owner={{ storm['user'] }}
     group={{ storm['group'] }}
-  notify: 
+  notify:
     - reload supervisord
     - restart storm-nimbus
     - restart storm-ui
@@ -28,13 +28,13 @@
 
 - name: supervisord configuration
   template: >
-    src=etc/supervisor/conf.d/storm-nimbus.conf.j2 
-    dest=/etc/supervisor/conf.d/storm-nimbus.conf 
-    owner=root 
-    group=root 
+    src=etc/supervisor/conf.d/storm-nimbus.conf.j2
+    dest=/etc/supervisor/conf.d/storm-nimbus.conf
+    owner=root
+    group=root
     mode=0644
   register: supervisord
-  notify: 
+  notify:
     - reload supervisord
     - restart storm-nimbus
     - restart storm-ui

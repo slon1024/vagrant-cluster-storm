@@ -7,69 +7,69 @@
 
 - name: prepare group
   group: >
-    name={{ storm['group'] }} 
+    name={{ storm['group'] }}
     state=present
 
 - name: prepare user
   user: >
-    name={{ storm['user'] }} 
-    group={{ storm['group'] }} 
-    comment="{{ storm['user'] }} user" 
+    name={{ storm['user'] }}
+    group={{ storm['group'] }}
+    comment="{{ storm['user'] }} user"
     state=present
 
 - name: fetch
   get_url: >
-    url={{ storm['url'] }} 
+    url={{ storm['url'] }}
     dest={{ storm['archive'] }}
 
 - name: unpack
   command: >
-    chdir={{ install_dir }} 
-    unzip {{ storm['archive'] }} 
+    chdir={{ install_dir }}
+    unzip {{ storm['archive'] }}
     creates={{ storm['home_dir'] }}
 
 - name: symlink
   file: >
-    src={{ storm['home_dir'] }} 
-    dest={{ storm['link'] }} 
-    owner={{ storm['user'] }} 
-    group={{ storm['group'] }} 
+    src={{ storm['home_dir'] }}
+    dest={{ storm['link'] }}
+    owner={{ storm['user'] }}
+    group={{ storm['group'] }}
     state=link
 
 - name: create dir /logs
   file: >
-    path={{ storm['home_dir'] }}/logs 
-    owner={{ storm['user'] }} 
-    group={{ storm['group'] }} 
-    recurse=yes 
+    path={{ storm['home_dir'] }}/logs
+    owner={{ storm['user'] }}
+    group={{ storm['group'] }}
+    recurse=yes
     state=directory
 
 - name: link local log dir to {{ storm['log_dir'] }}
   file: >
-    src={{ storm['home_dir'] }}/logs 
-    dest={{ storm['log_dir'] }} 
-    owner={{ storm['user'] }} 
-    group={{ storm['group'] }} 
+    src={{ storm['home_dir'] }}/logs
+    dest={{ storm['log_dir'] }}
+    owner={{ storm['user'] }}
+    group={{ storm['group'] }}
     state=link
 
 - name: create dir /conf
   file: >
-    path={{ storm['home_dir'] }}/conf 
-    owner={{ storm['user'] }} 
-    group={{ storm['group'] }} 
-    recurse=yes 
+    path={{ storm['home_dir'] }}/conf
+    owner={{ storm['user'] }}
+    group={{ storm['group'] }}
+    recurse=yes
     state=directory
 
 - name: recurse change permissions
   file: >
-    path={{ storm['home_dir'] }} 
-    owner={{ storm['user'] }} 
-    group={{ storm['group'] }} 
-    recurse=yes 
+    path={{ storm['home_dir'] }}
+    owner={{ storm['user'] }}
+    group={{ storm['group'] }}
+    recurse=yes
     state=directory
 
 - name: add storm to PATH
   template: >
-    src=etc/profile.d/storm.sh.j2 
-    dest=/etc/profile.d/storm.sh 
+    src=etc/profile.d/storm.sh.j2
+    dest=/etc/profile.d/storm.sh
     mode=0644
