@@ -6,7 +6,7 @@
     - pkg-config
 
 - name: fetch
-  git: repo={{ jzmq['repo'] }} dest={{ jzmq['home_dir'] }} update=false
+  git: repo={{ jzmq['repo'] }} dest={{ jzmq['home_dir'] }} update=yes
 
 - name: magic bug
   command: chdir={{ jzmq['home_dir'] }} sed -i 's/classdist_noinst.stamp/classnoinst.stamp/g' src/Makefile.am
@@ -17,11 +17,10 @@
 - name: configure
   command: chdir={{ jzmq['home_dir'] }} ./configure creates={{ jzmq['home_dir'] }}/Makefile
   environment:
-    JAVA_HOME: "{{ jzmq['java_dir'] }}"
+    JAVA_HOME: "{{ jzmq['java_home'] }}"
 
 - name: build
   command: chdir={{ jzmq['home_dir'] }} make creates={{ jzmq['home_dir'] }}/src/zmq.jar
 
 - name: install
   command: chdir={{ jzmq['home_dir'] }} make install creates={{ jzmq['jar_dir'] }}/zmq.jar
-  sudo: true
