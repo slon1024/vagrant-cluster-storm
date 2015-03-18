@@ -25,3 +25,6 @@ storm_supervisor
 
 [redis]
 10.77.1.3
+
+[redis_commander]
+10.77.1.3

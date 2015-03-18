@@ -12,20 +12,6 @@
   roles:
     - zookeeper
 
-- hosts: storm_nimbus
-  remote_user: vagrant
-  user: root
-  sudo: true
-  roles:
-    - storm_nimbus
-
-- hosts: storm_supervisor
-  remote_user: vagrant
-  user: root
-  sudo: true
-  roles:
-    - storm_supervisor
-
 - hosts: kafka
   remote_user: vagrant
   user: root
@@ -33,9 +19,31 @@
   roles:
     - kafka
 
+- hosts: storm_nimbus
+ remote_user: vagrant
+ user: root
+ sudo: true
+ roles:
+   - storm_nimbus
+
+- hosts: storm_supervisor
+ remote_user: vagrant
+ user: root
+ sudo: true
+ roles:
+   - storm_supervisor
+
+
 - hosts: redis
   remote_user: vagrant
   user: root
   sudo: true
   roles:
     - redis
+
+- hosts: redis_commander
+  remote_user: vagrant
+  user: root
+  sudo: true
+  roles:
+    - redis_commander
