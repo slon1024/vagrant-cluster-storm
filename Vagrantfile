@@ -1,7 +1,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 hosts = {
-  "alpha" => {ip: "10.77.1.2", ram: "2048", cpus: "2", ports: {}},
+  "alpha" => {ip: "10.77.1.2", ram: "1024", cpus: "2", ports: {}},
   "beta"  => {ip: "10.77.1.3", ram: "1024", cpus: "2", ports: {}},
   "gamma" => {ip: "10.77.1.4", ram: "1024", cpus: "2", ports: {}},
 }
@@ -21,6 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |vagrant_config|
         vb.customize ["modifyvm", :id, "--memory", params[:ram]]
         vb.customize ["modifyvm", :id, "--cpus", params[:cpus]]
         vb.customize ["modifyvm", :id, "--ioapic", "on"]
+        vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       end
 
       vagrant_config.vm.provision "ansible" do |ansible|

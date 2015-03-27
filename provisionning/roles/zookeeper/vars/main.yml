@@ -3,7 +3,7 @@ install_dir: /opt
 zookeeper_version: 3.4.6
 
 zookeeper:
-  url: "http://ftp.task.gda.pl/pub/www/apache/dist/zookeeper/zookeeper-{{ zookeeper_version }}/zookeeper-{{ zookeeper_version }}.tar.gz"
+  url: "http://www.apache.org/dist/zookeeper/zookeeper-{{ zookeeper_version }}/zookeeper-{{ zookeeper_version }}.tar.gz"
   archive: "{{ tmp_dir }}/zookeeper-{{ zookeeper_version }}.tar.gz"
   home_dir: "{{ install_dir }}/zookeeper-{{ zookeeper_version }}"
   bin_dir: "{{ install_dir }}/zookeeper-{{ zookeeper_version }}/bin"
